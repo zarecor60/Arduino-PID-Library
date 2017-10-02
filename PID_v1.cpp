@@ -59,7 +59,15 @@ bool PID::Compute()
 {
    if(!inAuto) return false;
    unsigned long now = millis();
-   unsigned long timeChange = (now - lastTime);
+   unsigned long timeChange;
+	
+   // Calculate timeChange (time between current and previous loop)
+   if (lastTime > now) {	// Handles case where time as rolled over
+	   timeChange = (4294967295 - lastTime) + now;
+	 } else {
+	   timeChange = (now - lastTime);
+   }
+	
    if(timeChange>=SampleTime)
    {
       /*Compute all the working error variables*/
